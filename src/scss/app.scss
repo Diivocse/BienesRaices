@@ -1,0 +1,24 @@
+/* Recordad no colocar la extensión (scss)*/
+
+@import 'base/normalize';
+@import 'base/variables';
+@import 'base/mixins';
+@import 'base/botones';
+@import 'base/globales';
+@import 'base/utilidades';
+@import 'base/darkmode';
+
+/* UI */
+@import 'layout/header';
+@import 'layout/navegacion';
+@import 'layout/iconos';
+@import 'layout/contactar';
+@import 'layout/anuncios';
+@import 'layout/inferior';
+@import 'layout/testimonial';
+@import 'layout/footer';
+@import 'layout/formularios';
+
+/* Pagina Internas */
+@import 'internas/nosotros.scss';
+@import 'internas/admin';
