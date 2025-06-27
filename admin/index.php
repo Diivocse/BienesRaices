@@ -19,9 +19,10 @@ $resultado = $_GET['resultado'] ?? null;
 <main class="contenedor seccion">
     <h1>Administrador de Bienes Raices</h1>
     <?php if (intval($resultado) === 1) : ?>
-        <p class="alerta exito">Anuncio creado correctamente</p>
-    
-        <?php endif ?>
+        <p class="alerta exito">Anuncio Creado Correctamente</p>
+    <?php elseif (intval($resultado) === 2) : ?>
+        <p class="alerta exito">Anuncio Actualizado Correctamente</p>
+    <?php endif ?>
 
     <a href="admin/propiedades/crear.php" class="boton boton-verde">Nueva Propiedad</a>
 
@@ -37,17 +38,17 @@ $resultado = $_GET['resultado'] ?? null;
         </thead>
 
         <tbody>
-            <?php while($propiedad = mysqli_fetch_assoc($resultadoConsulta)): ?>
-            <tr>
-                <td><?php echo $propiedad['id']; ?></td>
-                <td><?php echo $propiedad['titulo']; ?></td>
-                <td><img class="imagen-tabla" src="/imagenes/<?php echo $propiedad['imagen'] ?>"></td>
-                <td>$ <?php echo $propiedad['precio'] ?></td>
-                <td>
-                    <a href="#" class="boton-rojo-block">Eliminar</a>
-                    <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad['id'] ?>" class="boton-amarillo-block">Actualizar</a>
-                </td>
-            </tr>
+            <?php while ($propiedad = mysqli_fetch_assoc($resultadoConsulta)): ?>
+                <tr>
+                    <td><?php echo $propiedad['id']; ?></td>
+                    <td><?php echo $propiedad['titulo']; ?></td>
+                    <td><img class="imagen-tabla" src="/imagenes/<?php echo $propiedad['imagen'] ?>"></td>
+                    <td>$ <?php echo $propiedad['precio'] ?></td>
+                    <td>
+                        <a href="#" class="boton-rojo-block">Eliminar</a>
+                        <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad['id'] ?>" class="boton-amarillo-block">Actualizar</a>
+                    </td>
+                </tr>
             <?php endwhile ?>
         </tbody>
     </table>

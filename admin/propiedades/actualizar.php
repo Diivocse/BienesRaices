@@ -17,13 +17,13 @@ $db = conectarDB();
 
 // Tener los datos de la propiedad
 $consulta = "SELECT * FROM propiedades WHERE id =" . "{$id}";
-echo $consulta;
+/* echo $consulta; */
 $resultado = mysqli_query($db, $consulta);
 $propiedad = mysqli_fetch_assoc($resultado);
 
-echo "<pre>";
+/* echo "<pre>";
 echo var_dump($resultado);
-echo "</pre>";
+echo "</pre>"; */
 
 
 
@@ -111,23 +111,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
         /* Subida de archivos */
         // Crear Carpeta
-/*         $carpetaImagenes = '././imagenes';
-
+        $carpetaImagenes = '././imagenes';
         if (!is_dir($carpetaImagenes)) {
             mkdir($carpetaImagenes);
         }
 
-        // Generar un nombre único para las imagenes subidas
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        $nombreImagen = '';
 
-        // Subir la imagen
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/" . $nombreImagen); */
+        if ($imagen['name']) {
+            // Eliminar la imagen al actualizar
+            unlink($carpetaImagenes . '/' . $propiedad['imagen']);
+
+            // Generar un nombre único para las imagenes subidas
+            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+            // Subir la imagen
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/" . $nombreImagen);
+        } else {
+            $nombreImagen = $propiedad['imagen'];
+        }
+
+
 
         // Insertar en la base de datos.
-        $query = " UPDATE propiedades SET titulo = '{$titulo}', precio = {$precio}, descripcion = '{$descripcion}', habitaciones = {$habitaciones}, wc = {$wc}, estacionamiento = {$estacionamiento}, vendedores_id = {$vendedorId} WHERE id = {$id}";
+        $query = " UPDATE propiedades SET titulo = '{$titulo}', precio = {$precio}, imagen = '{$nombreImagen}', descripcion = '{$descripcion}', habitaciones = {$habitaciones}, wc = {$wc}, estacionamiento = {$estacionamiento}, vendedores_id = {$vendedorId} WHERE id = {$id}";
 
         /* echo $query; */
-        
+
         $resultado = mysqli_query($db, $query);
 
         if ($resultado) {
