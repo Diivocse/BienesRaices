@@ -14,6 +14,9 @@ $resultadoConsulta = mysqli_query($db, $query);
 
 
 $resultado = $_GET['resultado'] ?? null;
+
+if($_SERVER['REQUEST_METHOD'] === 'POST')
+
 ?>
 
 <main class="contenedor seccion">
@@ -45,7 +48,10 @@ $resultado = $_GET['resultado'] ?? null;
                     <td><img class="imagen-tabla" src="/imagenes/<?php echo $propiedad['imagen'] ?>"></td>
                     <td>$ <?php echo $propiedad['precio'] ?></td>
                     <td>
-                        <a href="#" class="boton-rojo-block">Eliminar</a>
+                        <form action="" method="$_POST" class="w-100">
+                            <input type="hidden" name="id" value="<?php echo $propiedad['id']; ?>">
+                            <input type="submit" class="boton-rojo-block" value="Eliminar">
+                        </form>
                         <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad['id'] ?>" class="boton-amarillo-block">Actualizar</a>
                     </td>
                 </tr>
