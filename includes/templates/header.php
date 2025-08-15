@@ -1,3 +1,13 @@
+<?php
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+$auth = $_SESSION['login'] ?? false;
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,15 +35,19 @@
                         <a href="anuncios.php">anuncios</a>
                         <a href="blog.php">blog</a>
                         <a href="contacto.php">contacto</a>
+
+                        <?php if ($auth): ?>
+                            <a href="cerrar-sesion.php">cerrar sesión</a>
+                        <?php endif; ?>
                     </nav>
                 </div>
             </div> <!-- Cierre de la .barra -->
 
 
             <?php
-            
+
             echo $inicio ?  '<h1>Venta de casas y departamentos exclusivos de lujo</h1>' : '';
-        
+
             ?>
         </div>
 
