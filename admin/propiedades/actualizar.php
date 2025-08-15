@@ -1,6 +1,12 @@
 <?php
+require 'includes/funciones.php';
+require 'includes/config/database.php';
 
-use Dom\Mysql;
+$auth = estaAutenticado();
+if(!$auth){
+    header('location: /');
+}
+
 
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT);
@@ -8,10 +14,8 @@ $id = filter_var($id, FILTER_VALIDATE_INT);
 if (!$id) {
     header('location: /admin');
 }
-
-
 // Base de datos
-require 'includes/config/database.php';
+
 
 $db = conectarDB();
 
@@ -102,9 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = "La imagen es muy pesada";
     }
 
-    /* echo "<pre>";
-    var_dump($errores);
-    echo "</pre>"; */
 
     // Manejador de errores | Revisar que el arreglo (array) esté vacio. Que no contenga ningún error de los validadores
 
@@ -147,8 +148,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-require 'includes\funciones.php';
 incluirTemplate('header');
 
 ?>

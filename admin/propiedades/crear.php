@@ -1,6 +1,12 @@
 <?php
 // Base de datos
+require 'includes/funciones.php';
 require 'includes/config/database.php';
+
+$auth = estaAutenticado();
+if (!$auth) {
+    header('location: /');
+}
 
 $db = conectarDB();
 
@@ -114,8 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-require 'includes\funciones.php';
 incluirTemplate('header');
 
 ?>

@@ -1,7 +1,14 @@
 <?php
 require 'includes/config/database.php';
-require './includes/funciones.php';
+require 'includes/funciones.php';
+
+$auth = estaAutenticado();
+if(!$auth){
+    header('location: /');
+}
+
 incluirTemplate('header');
+
 
 // Importamos la conexión
 $db = conectarDB();

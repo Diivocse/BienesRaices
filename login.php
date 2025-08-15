@@ -34,12 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = mysqli_fetch_assoc($resultado);
             $auth = password_verify($password, $usuario['password']);
 
-            $auth ? "Usuario encontrado" : $errores[] = "Contraseña incorrecta" ;
+            if ($auth) {
+                # Iniciamos la super variable _Session
+                session_start();
+
+                $_SESSION['usuario'] = $usuario['email'];
+                $_SESSION['login'] = true;
+
+                header('location: /admin');
+            } else {
+                $errores[] = "Contraseña incorrecta";
+            }
         } else {
             $errores[] = "El usuario no existe";
         }
     }
 }
+
+var_dump($_SESSION['login']);
 
 incluirTemplate('header');
 ?>
@@ -59,10 +71,10 @@ incluirTemplate('header');
         <form method="POST" class="formulario">
             <legend>Ingresa tus datos</legend>
             <label for="email">E-Mail</label>
-            <input type="text" name="email" placeholder="Tu Email" id="email" required>
+            <input type="text" name="email" placeholder="Tu Email" id="email" >
 
             <label for="password"></label>
-            <input type="password" name="password" placeholder="Tu password" id="password" required>
+            <input type="password" name="password" placeholder="Tu password" id="password" >
     </fieldset>
     <input type="submit" value="Iniciar sección" class="boton boton-verde">
     </form>
