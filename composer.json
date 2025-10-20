@@ -1,0 +1,16 @@
+{
+    "name": "diego/bienesraices_inicio",
+    "description": "Actualizando el proyecto con paradigma POO",
+    "authors": [
+        {
+            "name": "Diego",
+            "email": "diegoocampo.x@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "./classes"
+        }
+    }
+}

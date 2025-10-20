@@ -1,5 +1,5 @@
 <?php
-require 'app.php';
+// require 'app.php';
 
 function incluirTemplate(string $nombre, bool $inicio = false)
 {
