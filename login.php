@@ -2,8 +2,7 @@
 
 use Dom\Mysql;
 
-require 'includes/funciones.php';
-require 'includes/config/database.php';
+require 'includes/app.php';
 
 $db = conectarDB();
 

@@ -1,6 +1,5 @@
 <?php 
-/* Conexión a la base de datos */
-require __DIR__ . '/../config/database.php';
+/* Conexión a la base de datos; se retiró el require dado a que ya se está importando desde app.php */
 $db = conectarDB();
 
 /* Consulta Query */
