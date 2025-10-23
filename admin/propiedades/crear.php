@@ -1,12 +1,11 @@
 <?php
-// Base de datos
+
+use App\propiedad;
+
 require 'includes/app.php';
 
-$auth = estaAutenticado();
-if (!$auth) {
-    header('location: /');
-}
-
+// Funciones
+estaAutenticado();
 $db = conectarDB();
 
 // Consultar los vendedores
@@ -23,7 +22,7 @@ $descripcion = '';
 $habitaciones = '';
 $wc = '';
 $estacionamiento = '';
-$vendedorId = '';
+$vendedores_id = '';
 
 // Validar que el usuario haya enviado el formulario
 // Si el formulario se envía, procesar los datos
@@ -33,14 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     var_dump($_POST);
     echo "</pre>"; */
 
+    $propiedad = new propiedad($_POST);
+    pre($propiedad);
+
     $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
     $precio = mysqli_real_escape_string($db, $_POST['precio']);
     $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
     $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
     $wc = mysqli_real_escape_string($db, $_POST['wc']);
     $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-    $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
+    $vendedores_id = mysqli_real_escape_string($db, $_POST['vendedores_id']);
     $creado = date('Y-m-d');
+
 
     // Asignar files a una variable
     $imagen = $_FILES['imagen'];
@@ -69,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = "Debes agregar el número de estacionamiento";
     }
 
-    if (!$vendedorId) {
+    if (!$vendedores_id) {
         $errores[] = "Debes seleccionar el vendedor";
     }
 
@@ -107,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insertar en la base de datos.
         $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) 
-        VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
+        VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id') ";
 
         /* echo $query; */
         $resultado = mysqli_query($db, $query);
@@ -120,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 incluirTemplate('header');
-
 ?>
 
 
@@ -167,11 +169,11 @@ incluirTemplate('header');
 
         <fieldset>
             <legend>Vendedores</legend>
-            <select name="vendedor">
+            <select name="vendedores_id">
                 <option disabled selected>— Selecciona un vendedor —</option>
 
                 <?php while ($vendedor = mysqli_fetch_assoc($resultado)): ?>
-                    <option <?php echo $vendedorId === $vendedor['id'] ? "selected" : ''; ?> value="<?php echo $vendedor['id']; ?>">
+                    <option <?php echo $vendedores_id === $vendedor['id'] ? "selected" : ''; ?> value="<?php echo $vendedor['id']; ?>">
                         <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?> </option>
                 <?php endwhile; ?>
 
@@ -187,5 +189,4 @@ incluirTemplate('footer')
 ?>
 
 <!-- NOTAS -->
-
 <!-- Tener en cuenta en los formularios agregar las caracteristicas de Method GET / POST e igual de action que procesará el formulario -->
