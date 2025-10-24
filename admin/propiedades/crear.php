@@ -28,98 +28,42 @@ $vendedores_id = '';
 // Si el formulario se envía, procesar los datos
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    /*  echo "<pre>";
-    var_dump($_POST);
-    echo "</pre>"; */
 
     $propiedad = new propiedad($_POST);
-    pre($propiedad);
+    $propiedad->guardar();
 
-    $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-    $precio = mysqli_real_escape_string($db, $_POST['precio']);
-    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-    $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-    $wc = mysqli_real_escape_string($db, $_POST['wc']);
-    $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-    $vendedores_id = mysqli_real_escape_string($db, $_POST['vendedores_id']);
-    $creado = date('Y-m-d');
+    $errores = propiedad::getErrores();
 
-
-    // Asignar files a una variable
-    $imagen = $_FILES['imagen'];
-
-    if (!$titulo) {
-        $errores[] = "Debes añadir un titulo";
-    }
-
-    if (!$precio) {
-        $errores[] = "Debes seleccionar un precio";
-    }
-
-    if (strlen($descripcion) < 5) {
-        $errores[] = "Debes agregar una descripción mayor a 10 caracteres";
-    }
-
-    if (!$habitaciones) {
-        $errores[] = "Debes seleccionar el número de habitaciones";
-    }
-
-    if (!$wc) {
-        $errores[] = "Debes seleccionar el número de baños";
-    }
-
-    if (!$estacionamiento) {
-        $errores[] = "Debes agregar el número de estacionamiento";
-    }
-
-    if (!$vendedores_id) {
-        $errores[] = "Debes seleccionar el vendedor";
-    }
-
-    if (!$imagen['name']) {
-        $errores[] = "La imagen es obligatoria";
-    }
-
-    // Validar el tamaño de imagen (1mb)
-    $medida = 1000 * 1000;
-
-    if ($imagen['size'] > $medida) {
-        $errores[] = "La imagen es muy pesada";
-    }
-
-    /* echo "<pre>";
-    var_dump($errores);
-    echo "</pre>"; */
 
     // Manejador de errores | Revisar que el arreglo (array) esté vacio. Que no contenga ningún error de los validadores
 
-    if (empty($errores)) {
-        /* Subida de archivos */
-        // Crear Carpeta
-        $carpetaImagenes = '././imagenes';
+    // if (empty($errores)) {
+    //     /* Subida de archivos */
+    //     // Crear Carpeta
+    //     $carpetaImagenes = '././imagenes';
 
-        if (!is_dir($carpetaImagenes)) {
-            mkdir($carpetaImagenes);
-        }
+    //     if (!is_dir($carpetaImagenes)) {
+    //         mkdir($carpetaImagenes);
+    //     }
 
-        // Generar un nombre único para las imagenes subidas
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+    //     // Generar un nombre único para las imagenes subidas
+    //     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
-        // Subir la imagen
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/" . $nombreImagen);
+    //     // Subir la imagen
+    //     move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/" . $nombreImagen);
 
-        // Insertar en la base de datos.
-        $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) 
-        VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id') ";
+    //     // Insertar en la base de datos.
+    //     $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) 
+    //     VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id') ";
 
-        /* echo $query; */
-        $resultado = mysqli_query($db, $query);
+    //     /* echo $query; */
+    //     $resultado = mysqli_query($db, $query);
 
-        if ($resultado) {
-            // Redireccionar al usuario
-            header('location: /admin?resultado=1');
-        }
-    }
+    //     if ($resultado) {
+    //         // Redireccionar al usuario
+    //         header('location: /admin?resultado=1');
+    //     }
+    // }
 }
 
 incluirTemplate('header');

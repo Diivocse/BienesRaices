@@ -4,7 +4,7 @@
 define('TEMPLANTES_URL', __DIR__ . '/templates');
 define('FUNCIONES_URL', __DIR__ . '/funciones.php');
 
-function pre($valor)
+function debug($valor)
 {
     echo "<pre>";
     var_dump($valor);
@@ -18,11 +18,6 @@ function estaAutenticado()
     if (!$_SESSION['login']) {
         header('Location: /');
     }
-}
-
-function guardar(){
-     $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) 
-        VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id') ";
 }
 
 function incluirTemplate(string $nombre, bool $inicio = false)
