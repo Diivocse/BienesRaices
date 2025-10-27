@@ -4,14 +4,14 @@ namespace App;
 
 class Propiedad
 {
-    // Conexión a base de datos (protected y static)
+    // Conexión a base de datos (protected static)
     protected static $db;
     protected static $columnasDB = ['titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedores_id'];
 
-    // Validación de errores
+    // Validación de errores, iniciamos variable
     protected static $errores = [];
 
-    // Variables del objeto
+    // Variables del objeto, estructura del objeto
     public $id;
     public $titulo;
     public $precio;
@@ -23,11 +23,13 @@ class Propiedad
     public $creado;
     public $vendedores_id;
 
+    // Conectamos a la base de datos, vía "app.php"
     public static function setDB($database)
     {
         self::$db = $database;
     }
 
+    // Damos forma al objeto e inicializamos
     public function __construct($args = [])
     {
         $this->id = $args['id'] ?? '';
@@ -42,14 +44,11 @@ class Propiedad
         $this->vendedores_id = $args['vendedores_id'] ?? '';
     }
 
-
     public function guardar()
     {
-
+        
         // Sanitizar los atributos; llamos a la función para sanitizar los atributos
         $atributos = $this->sanitizarAtributos();
-        $string = join(', ', array_keys($atributos));
-        join(', ', array_values($atributos));
 
         $query = " INSERT INTO propiedades ( ";
         $query .= join(', ', array_keys($atributos));
@@ -58,8 +57,9 @@ class Propiedad
         $query .= " ') ";
 
         $resultado = self::$db->query($query);
-
         self::$db->query($query);
+
+        return $resultado;
     }
 
     public function atributos()
@@ -84,13 +84,13 @@ class Propiedad
         return $sanitizado;
     }
 
-    // Validación
+    // Validación de errores del formulario
     public static function getErrores()
     {
         return self::$errores;
     }
 
-    public function validacion()
+    public function validar()
     {
         if (!$this->titulo) {
             self::$errores[] = "Debes añadir un titulo";
@@ -120,20 +120,17 @@ class Propiedad
             self::$errores[] = "Debes seleccionar el vendedor";
         }
 
-        if (!$this->imagen['name']) {
+        if (!$this->imagen) {
             self::$errores[] = "La imagen es obligatoria";
         }
 
-        /*         // Asignar files a una variable
-        $imagen = $_FILES['imagen'];
-
-        // Validar el tamaño de imagen (1mb)
-        $medida = 1000 * 1000;
-
-        if ($imagen['size'] > $medida) {
-            $errores[] = "La imagen es muy pesada";
-        } */
-
         return self::$errores;
+    }
+
+    public function setImagen($imagen)
+    {
+        if ($imagen) {
+            $this->imagen = $imagen;
+        }
     }
 }

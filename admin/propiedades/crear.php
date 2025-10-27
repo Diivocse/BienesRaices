@@ -1,6 +1,8 @@
 <?php
 
 use App\propiedad;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager as Image;
 
 require 'includes/app.php';
 
@@ -13,7 +15,7 @@ $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db, $consulta);
 
 // Arreglo con mensajes de errores
-$errores = [];
+$errores = propiedad::getErrores();
 
 // Inicializamos los valores de los campos para "guardar" valores previos digitados antes de un posible error o no tificación
 $titulo = '';
@@ -30,40 +32,35 @@ $vendedores_id = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $propiedad = new propiedad($_POST);
-    $propiedad->guardar();
 
-    $errores = propiedad::getErrores();
+    // Generar un nombre único para las imagenes subidas
+    $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+    if ($_FILES['imagen']['tmp_name']) {
+        $manager = new Image(Driver::class);
+        $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800, 600);
+        $propiedad->setImagen($nombreImagen);
+    }
+
+    $errores = $propiedad->validar();
+
+    if (empty($errores)) {
 
 
-    // Manejador de errores | Revisar que el arreglo (array) esté vacio. Que no contenga ningún error de los validadores
+        
+        if (!is_dir(CARPETA_IMAGENES)) {
+            mkdir(CARPETA_IMAGENES);
+        }
 
-    // if (empty($errores)) {
-    //     /* Subida de archivos */
-    //     // Crear Carpeta
-    //     $carpetaImagenes = '././imagenes';
+        $imagen->save(CARPETA_IMAGENES . $nombreImagen);
 
-    //     if (!is_dir($carpetaImagenes)) {
-    //         mkdir($carpetaImagenes);
-    //     }
+        $resultado = $propiedad->guardar();
 
-    //     // Generar un nombre único para las imagenes subidas
-    //     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-
-    //     // Subir la imagen
-    //     move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/" . $nombreImagen);
-
-    //     // Insertar en la base de datos.
-    //     $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) 
-    //     VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id') ";
-
-    //     /* echo $query; */
-    //     $resultado = mysqli_query($db, $query);
-
-    //     if ($resultado) {
-    //         // Redireccionar al usuario
-    //         header('location: /admin?resultado=1');
-    //     }
-    // }
+        if ($resultado) {
+            // Redireccionar al usuario
+            header('Location: /admin?resultado=1');
+        }
+    }
 }
 
 incluirTemplate('header');

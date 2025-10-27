@@ -3,6 +3,7 @@
 
 define('TEMPLANTES_URL', __DIR__ . '/templates');
 define('FUNCIONES_URL', __DIR__ . '/funciones.php');
+define('CARPETA_IMAGENES', __DIR__ . '/../imagenes/');
 
 function debug($valor)
 {
@@ -18,6 +19,7 @@ function estaAutenticado()
     if (!$_SESSION['login']) {
         header('Location: /');
     }
+    return true;
 }
 
 function incluirTemplate(string $nombre, bool $inicio = false)

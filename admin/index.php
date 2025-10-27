@@ -1,16 +1,10 @@
 <?php
 require 'includes/app.php';
 
-$auth = estaAutenticado();
-if(!$auth){
-    header('location: /');
-}
+estaAutenticado();
 
 incluirTemplate('header');
 
-
-// Importamos la conexión
-$db = conectarDB();
 
 // Escribimos el Query/Consulta
 $query = "SELECT * FROM propiedades";
