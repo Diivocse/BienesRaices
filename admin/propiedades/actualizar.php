@@ -1,10 +1,8 @@
 <?php
 require 'includes/app.php';
+use App\Propiedad;
 
-$auth = estaAutenticado();
-if(!$auth){
-    header('location: /');
-}
+estaAutenticado();
 
 
 $id = $_GET['id'];

@@ -31,3 +31,13 @@ function truncarTexto(string $trunk)
 {
     return (strlen($trunk) >= 50) ? substr($trunk, 0, 50) . "..." : $trunk;
 }
+
+// ———————————————————————————————————————————————————————————————————————————
+// Sanitizar / escapar código HTML
+// ———————————————————————————————————————————————————————————————————————————
+
+function s($html): string
+{
+    $s = htmlspecialchars($html);
+    return $s;
+}
