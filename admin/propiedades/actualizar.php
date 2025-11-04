@@ -14,8 +14,8 @@
 
 require 'includes/app.php';
 
-use Intervention\Image\ImageManager as Image;
 use App\Propiedad;
+use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
 estaAutenticado();
@@ -37,7 +37,7 @@ $resultado = mysqli_query($db, $consulta);
 $errores = Propiedad::getErrores();
 
 // Inicializamos los valores de los campos para sostener valores previos digitados previamente por el usuario ante un posible error o no tificación de los campos
- 
+
 $titulo = $propiedad->titulo;
 $precio = $propiedad->precio;
 $descripcion = $propiedad->descripcion;
@@ -50,25 +50,35 @@ $vendedores_id = $propiedad->vendedores_id;
 /**
  *      Sentencia IF para identificar si el metodo del servidor y de la solicitud es igual a 'POST'
  */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $args = $_POST['propiedad'];
-    $propiedad->sincronizar($args);
-    $errores = $propiedad->validar();
-
-    $nombreImagen = md5(uniqid(rand(), true) . ".jpg");
-    if ($_FILES['propiedad']['tmp_name']['imagen']) {
-        $manager = new Image(Driver::class);
-        $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
-        $propiedad->setImagen($nombreImagen);
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        //Asignar los atributos
+        $args = $_POST['propiedad'];
+        $propiedad->sincronizar($args);
+ 
+        $errores = $propiedad->validar();
+        
+        //Revisar que el arreglo de errores esté vacío
+        if (empty($errores)) {
+            
+            if ($_FILES['propiedad']['tmp_name']['imagen']) {
+                
+                //Generar un nombre único
+                $nombreImagen = md5( uniqid( rand(), true) ) . ".jpg";
+ 
+                //Realiza un resize a la imagen con intervention
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800,600);
+ 
+                /*Setear la imagen*/
+                $propiedad->setImagen($nombreImagen);
+ 
+                //Guarda la imagen en el servidor
+                $image->save(CARPETA_IMAGENES . $nombreImagen);
+            }
+ 
+            $propiedad->actualizar();
+        }   
     }
-
-    if (empty($errores))
-    {
-        $imagen->save(CARPETA_IMAGENES . $nombreImagen);
-        $propiedad->guardar();
-    }
-}
 
 incluirTemplate('header');
 
