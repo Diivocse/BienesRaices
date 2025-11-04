@@ -13,7 +13,7 @@ $db = conectarDB();
 $propiedad = new propiedad();
 
 // Consultar los vendedores
-$consulta = "SELECT * FROM vendedores";
+$consulta = " SELECT * FROM vendedores ";
 $resultado = mysqli_query($db, $consulta);
 
 // Arreglo con mensajes de errores
@@ -26,7 +26,7 @@ $errores = propiedad::getErrores();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $propiedad = new propiedad($_POST['propiedad']);
-
+    
     // Generar un nombre único para las imagenes subidas
     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
@@ -39,21 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores = $propiedad->validar();
 
     if (empty($errores)) {
-
-
-        
         if (!is_dir(CARPETA_IMAGENES)) {
             mkdir(CARPETA_IMAGENES);
         }
 
         $imagen->save(CARPETA_IMAGENES . $nombreImagen);
 
-        $resultado = $propiedad->guardar();
-
-        if ($resultado) {
-            // Redireccionar al usuario
-            header('Location: /admin?resultado=1');
-        }
+        $propiedad->crear();
     }
 }
 
