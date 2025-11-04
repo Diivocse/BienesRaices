@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Intervention\Image\Colors\Hsv\Channels\Value;
-
 class Propiedad
 {
     // Conexión a base de datos (protected static)
@@ -35,7 +33,7 @@ class Propiedad
     // Damos forma al objeto e inicializamos
     public function __construct($args = [])
     {
-        $this->id = $args['id'] ?? '';
+        $this->id = $args['id'] ?? NULL;
         $this->titulo = $args['titulo'] ?? '';
         $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
@@ -52,7 +50,7 @@ class Propiedad
     // ————————————————————————————————————————————————————————————————————
     public function guardar()
     {
-        if (isset($this->id)) {
+        if (!is_null($this->id)) {
             // ACTUALIZAMOS EL REGISTRO CON LA FUNCIÓN actualizar()
             $this->actualizar();
         } else {
@@ -72,12 +70,16 @@ class Propiedad
 
         $query = " INSERT INTO propiedades ( ";
         $query .= join(', ', array_keys($atributos));
-        $query .= " ) VALUES (' ";
+        $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributos));
-        $query .= " ') ";
+        $query .= "') ";
 
         $resultado = self::$db->query($query);
-        self::$db->query($query);
+
+        if ($resultado) {
+            // Redireccionar al usuario
+            header('Location: /admin?resultado=1');
+        }
 
         return $resultado;
     }
@@ -89,23 +91,33 @@ class Propiedad
 
         $valores = [];
 
-        foreach ($atributos as $key => $value)
-        {
+        foreach ($atributos as $key => $value) {
             $valores[] = "{$key}='{$value}'";
         }
 
         $query = " UPDATE propiedades SET ";
-        $query .= join(', ', $valores );
+        $query .= join(', ', $valores);
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
         $query .= " LIMIT 1 ";
 
         $resultado = self::$db->query($query);
 
         if ($resultado) {
+
             // Redireccionar al usuario
             header('location: /admin?resultado=2');
-        }/*  */
+        }
+    }
 
+    public function eliminar()
+    {
+        $query = " DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
+        $resultado = self::$db->query($query);
+
+        if ($resultado) {
+            $this->borrarImagen();
+            header('location: /admin?resultado=3');
+        }
     }
 
     public function atributos()
@@ -131,13 +143,19 @@ class Propiedad
         return $sanitizado;
     }
 
+    public function borrarImagen()
+    {
+        $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+        if ($existeArchivo) {
+            unlink(CARPETA_IMAGENES . $this->imagen);
+        }
+    }
 
     // Validación de errores del formulario
     public static function getErrores()
     {
         return self::$errores;
     }
-
 
     public function validar()
     {
@@ -176,24 +194,18 @@ class Propiedad
         return self::$errores;
     }
 
-
     public function setImagen($imagen)
     {
         // Eliminar la imagen previa (MODULO DE ACTUALIZAR.PHP)
-
-
-        if (isset($this->id)) {
-            $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
-            unlink(CARPETA_IMAGENES . $this->imagen);
+        if (!is_null($this->id)) {
+            $this->borrarImagen();
         }
-
 
         // Asignación de la variable imagen
         if ($imagen) {
             $this->imagen = $imagen;
         }
     }
-
 
     public static function all()
     {
@@ -202,14 +214,12 @@ class Propiedad
         return $resultado;
     }
 
-
     public static function find($id)
     {
-        $query = $consulta = "SELECT * FROM propiedades WHERE id =" . "{$id}";
+        $query = "SELECT * FROM propiedades WHERE id =" . "{$id}";
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
-
 
     public static function consultarSQL($query)
     {
@@ -229,7 +239,6 @@ class Propiedad
         // Retornar los resultados
         return $array;
     }
-
 
     protected static function crearObjeto($registro)
     {
