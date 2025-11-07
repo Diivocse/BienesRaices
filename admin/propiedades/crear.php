@@ -1,20 +1,15 @@
 <?php
 
 use App\propiedad;
+use App\Vendedores;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager as Image;
 
 require 'includes/app.php';
 
-// Funciones
 estaAutenticado();
-$db = conectarDB();
-// Propiedad vacía para inincializar los campos
 $propiedad = new propiedad();
-
-// Consultar los vendedores
-$consulta = " SELECT * FROM vendedores ";
-$resultado = mysqli_query($db, $consulta);
+$vendedores = Vendedores::all();
 
 // Arreglo con mensajes de errores
 $errores = propiedad::getErrores();

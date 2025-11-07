@@ -3,7 +3,7 @@
         'name' => 'diego/bienesraices_inicio',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c878d1ffe14f2d703575663c12f9467b07c6af3c',
+        'reference' => 'd7b775f190748511c428cf9e0d1fc91491df2468',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'diego/bienesraices_inicio' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c878d1ffe14f2d703575663c12f9467b07c6af3c',
+            'reference' => 'd7b775f190748511c428cf9e0d1fc91491df2468',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

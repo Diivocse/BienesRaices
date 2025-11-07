@@ -1,14 +1,16 @@
 <?php
 require 'includes/app.php';
 use App\Propiedad;
+use App\vendedores;
 
 estaAutenticado();
 incluirTemplate('header');
 
 // METODO PARA TRAER TODAS LAS PROPIEDADES DE LA BASE DE DATOS
 $propiedades = Propiedad::all();
+$vendedor = Vendedores::all();
 
-$query = "SELECT * FROM propiedades";
+$query = " SELECT * FROM " . static::$tabla;
 
 // Consultar la DB
 $resultadoConsulta = mysqli_query($db, $query);
@@ -26,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $propiedad->eliminar();
         $propiedad->borrarImagen();
         
-
     }
 }
 
