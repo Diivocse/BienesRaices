@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Vendedores extends ActiveRecord
+class Vendedor extends ActiveRecord
 {
     protected static $tabla = 'vendedores';
     protected static $columnasDB = ['id', 'nombre', 'apellido', 'telefono'];
@@ -18,5 +18,12 @@ class Vendedores extends ActiveRecord
         $this->nombre = $args['nombre'] ?? '';
         $this->apellido = $args['apellido'] ?? '';
         $this->telefono = $args['telefono'] ?? '';
+    }
+
+    public function validar()
+    {
+        if (!$this->vendedores_id) {
+            self::$errores[] = "Debes seleccionar el vendedor";
+        }
     }
 }

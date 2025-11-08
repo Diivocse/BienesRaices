@@ -1,15 +1,17 @@
 <?php
 
 use App\propiedad;
-use App\Vendedores;
+use App\Vendedor;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager as Image;
 
 require 'includes/app.php';
 
 estaAutenticado();
+
 $propiedad = new propiedad();
-$vendedores = Vendedores::all();
+
+$vendedores = Vendedor::all();
 
 // Arreglo con mensajes de errores
 $errores = propiedad::getErrores();

@@ -108,7 +108,7 @@ class ActiveRecord {
     {
         $atributos = [];
 
-        foreach (self::$columnasDB as $columna) {
+        foreach (static::$columnasDB as $columna) {
             if ($columna === 'id') continue;
             $atributos[$columna] = $this->$columna;
         }
@@ -138,44 +138,13 @@ class ActiveRecord {
     // Validación de errores del formulario
     public static function getErrores()
     {
-        return self::$errores;
+        return static::$errores;
     }
 
     public function validar()
     {
-        if (!$this->titulo) {
-            self::$errores[] = "Debes añadir un titulo";
-        }
-
-        if (!$this->precio) {
-            self::$errores[] = "Debes seleccionar un precio";
-        }
-
-        if (strlen($this->descripcion) < 5) {
-            self::$errores[] = "Debes agregar una descripción mayor a 10 caracteres";
-        }
-
-        if (!$this->habitaciones) {
-            self::$errores[] = "Debes seleccionar el número de habitaciones";
-        }
-
-        if (!$this->wc) {
-            self::$errores[] = "Debes seleccionar el número de baños";
-        }
-
-        if (!$this->estacionamiento) {
-            self::$errores[] = "Debes agregar el número de estacionamiento";
-        }
-
-        if (!$this->vendedores_id) {
-            self::$errores[] = "Debes seleccionar el vendedor";
-        }
-
-        if (!$this->imagen) {
-            self::$errores[] = "La imagen es obligatoria";
-        }
-
-        return self::$errores;
+        static::$errores = [];
+        return static::$errores;
     }
 
     public function setImagen($imagen)
@@ -193,7 +162,6 @@ class ActiveRecord {
 
     public static function all()
     {
-        
         $query = " SELECT * FROM " . static::$tabla;
         $resultado = self::consultarSQL($query);
         return $resultado;
@@ -215,7 +183,7 @@ class ActiveRecord {
         $array = [];
 
         while ($registro = $resultado->fetch_assoc()) {
-            $array[] = self::crearObjeto($registro);
+            $array[] = static::crearObjeto($registro);
         }
 
         // Liberar la memoria

@@ -15,6 +15,7 @@
 require 'includes/app.php';
 
 use App\Propiedad;
+use App\Vendedor;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -27,29 +28,12 @@ if (!$id) {
     header('location: /admin');
 }
 
-$db = conectarDB();
-
 $propiedad = Propiedad::find($id);
+$vendedores = Vendedor::all();
 
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
 
 $errores = Propiedad::getErrores();
 
-// Inicializamos los valores de los campos para sostener valores previos digitados previamente por el usuario ante un posible error o no tificación de los campos
-
-$titulo = $propiedad->titulo;
-$precio = $propiedad->precio;
-$descripcion = $propiedad->descripcion;
-$habitaciones = $propiedad->habitaciones;
-$imagen = $propiedad->imagen;
-$wc = $propiedad->wc;
-$estacionamiento = $propiedad->estacionamiento;
-$vendedores_id = $propiedad->vendedores_id;
-
-/**
- *      Sentencia IF para identificar si el metodo del servidor y de la solicitud es igual a 'POST'
- */
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
         //Asignar los atributos
         $args = $_POST['propiedad'];
@@ -76,7 +60,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $image->save(CARPETA_IMAGENES . $nombreImagen);
             }
  
-            $propiedad->actualizar();
+            $propiedad->guardar();
         }   
     }
 

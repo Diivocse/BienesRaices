@@ -1,19 +1,19 @@
 <?php
 require 'includes/app.php';
+
+/* use App\ActiveRecord; */
 use App\Propiedad;
-use App\vendedores;
+use App\Vendedor;
 
 estaAutenticado();
 incluirTemplate('header');
 
 // METODO PARA TRAER TODAS LAS PROPIEDADES DE LA BASE DE DATOS
 $propiedades = Propiedad::all();
-$vendedor = Vendedores::all();
+$vendedores = Vendedor::all();
 
-$query = " SELECT * FROM " . static::$tabla;
-
-// Consultar la DB
-$resultadoConsulta = mysqli_query($db, $query);
+/* $query = " SELECT * FROM " . static::$tabla; */
+/* $resultadoConsulta = mysqli_query($db, $query); */
 
 
 $resultado = $_GET['resultado'] ?? null;
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($id) {
         $propiedad = Propiedad::find($id);
         $propiedad->eliminar();
-        $propiedad->borrarImagen();
+        /* $propiedad->borrarImagen(); */
         
     }
 }
