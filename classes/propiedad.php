@@ -61,5 +61,7 @@ class Propiedad extends ActiveRecord
         if (!$this->imagen) {
             self::$errores[] = "La imagen es obligatoria";
         }
+
+        return self::$errores;
     }
 }

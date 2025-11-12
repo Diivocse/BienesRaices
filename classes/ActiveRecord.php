@@ -1,6 +1,8 @@
 <?php
-
 namespace App;
+
+use App\Propiedad;
+use App\Vendedor;
 
 class ActiveRecord {
         // Conexión a base de datos (protected static)
@@ -13,15 +15,19 @@ class ActiveRecord {
 
     // Variables del objeto, estructura del objeto
     public $id;
-    public $titulo;
-    public $precio;
     public $imagen;
+/*  public $titulo;
+    public $precio;
+    
     public $descripcion;
     public $habitaciones;
     public $wc;
     public $estacionamiento;
     public $creado;
     public $vendedores_id;
+    public $nombre;
+    public $apellido;
+    public $telefono; */
 
     // Conectamos a la base de datos, vía "app.php"
     public static function setDB($database)
