@@ -1,11 +1,13 @@
 <?php
+
 namespace App;
 
 use App\Propiedad;
 use App\Vendedor;
 
-class ActiveRecord {
-        // Conexión a base de datos (protected static)
+class ActiveRecord
+{
+    // Conexión a base de datos (protected static)
     protected static $db;
     protected static $columnasDB = [];
     protected static $tabla = '';
@@ -16,7 +18,7 @@ class ActiveRecord {
     // Variables del objeto, estructura del objeto
     public $id;
     public $imagen;
-/*  public $titulo;
+    /*  public $titulo;
     public $precio;
     
     public $descripcion;
@@ -85,7 +87,7 @@ class ActiveRecord {
             $valores[] = "{$key}='{$value}'";
         }
 
-        $query = " UPDATE ". static::$tabla . " SET ";
+        $query = " UPDATE " . static::$tabla . " SET ";
         $query .= join(', ', $valores);
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
         $query .= " LIMIT 1 ";
@@ -101,7 +103,7 @@ class ActiveRecord {
 
     public function eliminar()
     {
-        $query = " DELETE FROM ". static::$tabla ." WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
+        $query = " DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
         $resultado = self::$db->query($query);
 
         if ($resultado) {
@@ -173,9 +175,16 @@ class ActiveRecord {
         return $resultado;
     }
 
+    public static function get($cantidad)
+    {
+        $query = " SELECT * FROM " . static::$tabla . " LIMIT " . $cantidad;
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
     public static function find($id)
     {
-        $query = "SELECT * FROM ". static::$tabla ." WHERE id =" . "{$id}";
+        $query = "SELECT * FROM " . static::$tabla . " WHERE id =" . "{$id}";
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
@@ -219,6 +228,4 @@ class ActiveRecord {
             }
         }
     }
-
 }
-

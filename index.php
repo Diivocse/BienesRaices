@@ -38,7 +38,6 @@ incluirTemplate('header', $inicio = true);
 
 
     <?php
-    $limite = 3;
     include 'includes/templates/anuncios.php';
     ?>
 
